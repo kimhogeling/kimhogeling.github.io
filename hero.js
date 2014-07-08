@@ -18,7 +18,13 @@ function hero(heroConfig) {
     }
 
     function removeClass(className) {
-        if (self.domElement.classList.contains(className)) {
+        var domclass, withSpace;
+        domclass = self.domElement.className;
+        if (domclass.indexOf(className) >= 0) {
+            withSpace = ' ' + className;
+            if (domclass.indexOf(withSpace) >= 0) {
+                className = withSpace;
+            }
             self.domElement.className = self.domElement.className.split(className).join('');
         }
     }
@@ -64,11 +70,11 @@ function hero(heroConfig) {
     }
 
     function swingSword() {
-        console.log('swingSword');
+        addClass('swingSword');
     }
 
     function putSwordAway() {
-        console.log('putSwordAway');
+        removeClass('swingSword');
     }
 
     var self, move, created;
@@ -115,7 +121,8 @@ function hero(heroConfig) {
         changedDirection: false,
         swingSword: swingSword,
         putSwordAway: putSwordAway,
-        swingingSword: false
+        swingingSword: false,
+        swordLocked: false
     };
 
     self.initHp = 0 + self.hp;

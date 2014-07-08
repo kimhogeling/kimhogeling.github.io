@@ -13,6 +13,7 @@ var jscraft = (function(d, field, statusBox, hero, monster){
             self.hero.draw();
             drawMonsters();
             self.statusBox.draw(self.hero, self.monsters);
+            map.draw(self.field.currentField);
             self.needDraw = false;
         }
         requestAnimationFrame(draw);
@@ -80,7 +81,8 @@ var jscraft = (function(d, field, statusBox, hero, monster){
             self.needDraw = true;
         },
         SWORD : function () {
-            if (self.hero.swingingSword === false) {
+            if (self.hero.swingingSword === false, self.hero.swordLocked === false) {
+                self.hero.swordLocked = true;
                 self.hero.swingingSword = true;
                 self.hero.swingSword();
                 self.needDraw = true;
@@ -88,7 +90,7 @@ var jscraft = (function(d, field, statusBox, hero, monster){
                     self.hero.putSwordAway();
                     self.hero.swingingSword = false;
                     self.needDraw = true;
-                }, 1000);
+                }, 200);
             }
         }
     }
@@ -125,23 +127,33 @@ var jscraft = (function(d, field, statusBox, hero, monster){
         d.onkeyup = function (e) {
             e = e || window.event;
             if (self.keys[e.keyCode]) {
+                if (self.keys[e.keyCode] === 'SWORD') {
+                    self.hero.swordLocked = false;
+                }
                 delete self.activeActions[self.keys[e.keyCode]];
             }
         };
     };
 
-    self.init = function (levelConfig) {
+    self.init = function () {
+        map.init();
         self.field = field;
-        self.field.setField('2.3');
-        makeMonsters(map[self.field.currentField].monsters);
-        self.hero = hero(levelConfig.hero);
+        self.field.setField('02.02');
+        makeMonsters(map.fields[self.field.currentField].monsters);
+        self.hero = hero({
+                name: 'Lale',
+                lvl: 1,
+                top: 230,
+                left: 180
+            });
         self.statusBox = statusBox;
+        map.firstDraw();
         draw();
         self.bindKeys();
         setInterval(self.reactToActions, 15);
         setInterval(self.detectCollision, 15);
     };
 
-    return self;
+    self.init();
 
 }(window.document, field, statusBox, hero, monster));

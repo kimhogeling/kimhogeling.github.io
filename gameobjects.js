@@ -27,7 +27,7 @@ creator = (function(d){
 
     return {
         createUnit : function (id) {
-            var hp, hpBar, newUnit;
+            var hp, hpBar, newUnit, sword;
 
             hp = d.createElement('div');
             hp.className = 'hp';
@@ -38,8 +38,17 @@ creator = (function(d){
             newUnit = d.createElement('div');
             newUnit.id = id;
 
+            // Only create sword for hero
+            if (id === 'hero') {
+                sword = d.createElement('div');
+                sword.id = 'sword';
+                newUnit.appendChild(sword);
+                newUnit.className = 'down';
+            }
+
             hpBar.appendChild(hp);
             newUnit.appendChild(hpBar);
+
             field.domElement.appendChild(newUnit);
 
             return {
@@ -67,16 +76,14 @@ statusBox = (function(d){
 
     pub.draw = function (hero, monsters) {
         var i, len;
-        pri.domElement.innerText = hero.name + '\nXP: ' + hero.xp + '\nLVL: ' + hero.lvl
+        pri.domElement.innerText = 'Draw Sword with F';
+        pri.domElement.innerText += '\nXP: ' + hero.xp + '\nLVL: ' + hero.lvl
         pri.domElement.innerText += '\nHP : ' + hero.hp;
         pri.domElement.innerText += '\nStr : ' + hero.str;
-        pri.domElement.innerText += '\nHurt : ' + hero.hurt;
-        pri.domElement.innerText += '\nDirection : ' + hero.direction;
-        pri.domElement.innerText += '\nChangedDirection : ' + hero.changedDirection;
         pri.domElement.innerText += '\nTop : ' + hero.top + ', Left : ' + hero.left;
         len = monsters.length;
         for (i = 0; i < len; i += 1) {
-            pri.domElement.innerText += '\nMonster : ' + monsters[i].type;
+            pri.domElement.innerText += '\nMonstertype : ' + monsters[i].type;
             pri.domElement.innerText += '\nHP : ' + monsters[i].hp;
             pri.domElement.innerText += '\nTop : ' + monsters[i].top + ', Left : ' + monsters[i].left;
         }
