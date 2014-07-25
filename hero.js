@@ -7,6 +7,7 @@ function hero(heroConfig) {
             self.xp = self.xp - (self.lvl * self.lvl);
             self.lvl++;
         }
+        self.str = self.lvl * 10;
     }
 
     function getHpPercent() {
@@ -88,7 +89,7 @@ function hero(heroConfig) {
         lvl: 1,
         hp: heroConfig.lvl * 30 * heroConfig.lvl / 2,
         hpElement: created.hp,
-        str: heroConfig.lvl * 3,
+        str: heroConfig.lvl * 10,
         draw: draw,
         gainXp: gainXp,
         move: move,

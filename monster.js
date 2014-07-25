@@ -47,7 +47,7 @@ function monster(monsterConfig, field) {
         hpBarElement: created.hpBar,
         hpElement: created.hp,
         initHp: monsterConfig.lvl * 30 * monsterConfig.lvl / 2,
-        str: monsterConfig.lvl * 3,
+        str: monsterConfig.lvl * 2,
         lvl: monsterConfig.lvl,
         draw: draw,
         hurt: false,
