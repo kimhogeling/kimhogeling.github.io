@@ -81,7 +81,7 @@ h1 {
 #hero {
     height: 35px;
     width: 35px;
-    background: url('img/zelda-sprites-link.png');
+    /*background: url('img/zelda-sprites-link.png');*/
     background-size: 2170%;
 }
 
@@ -90,15 +90,23 @@ h1 {
 }
 
 #hero.up {
-    background-position: -87% 0;
+    /*background-position: -87% 0;*/
+    background: url('img/hero/up.png');
+}
+
+#hero.down {
+    /*background-position: -87% 0;*/
+    background: url('img/hero/down.png');
 }
 
 #hero.right {
-    background-position: -78% 0;
+    /*background-position: -78% 0;*/
+    background: url('img/hero/right.png');
 }
 
 #hero.left {
-    background-position: 8.8% 0;
+    /*background-position: 8.8% 0;*/
+    background: url('img/hero/left.png');
 }
 
 #sword {

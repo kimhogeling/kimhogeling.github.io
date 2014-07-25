@@ -56,18 +56,18 @@ function sword(unit) {
             setDirection('up');
         },
         right: function (unit) {
-            self.top = unit.top + unit.height / 2;
-            self.left = unit.left + unit.width;
+            self.top = unit.top + unit.height / 3;
+            self.left = unit.left + unit.width / 1.4;
             setDirection('right');
         },
         down: function (unit) {
-            self.top = unit.top + unit.height;
+            self.top = unit.top + unit.height / 1.7;
             self.left = unit.left + unit.width / 2;
             setDirection('down');
         },
         left: function (unit) {
-            self.top = unit.top + unit.height / 2;
-            self.left = unit.left - unit.width;
+            self.top = unit.top + unit.height / 3;
+            self.left = unit.left - unit.width / 1.6;
             setDirection('left');
         },
     };

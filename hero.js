@@ -83,8 +83,8 @@ function hero(heroConfig) {
         name: heroConfig.name || 'no name',
         top: heroConfig.top || 230,
         left: heroConfig.left || 180,
-        width: 30,
-        height: 30,
+        width: 32,
+        height: 32,
         xp: 0,
         lvl: 1,
         hp: heroConfig.lvl * 30 * heroConfig.lvl / 2,
@@ -100,6 +100,8 @@ function hero(heroConfig) {
     };
 
     self.initHp = self.hp;
+    self.domElement.style.width = self.width + 'px';
+    self.domElement.style.height = self.height + 'px';
 
     return self;
 }
