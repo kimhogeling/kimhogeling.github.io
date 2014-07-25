@@ -1,5 +1,7 @@
 function hero(heroConfig) {
 
+    var self, move, created;
+
     function _increaseLvl() {
         while (self.xp >= (self.lvl * self.lvl)) {
             self.xp = self.xp - (self.lvl * self.lvl);
@@ -11,29 +13,11 @@ function hero(heroConfig) {
         return parseInt(self.hp * 100 / self.initHp, 10);
     }
 
-    function addClass(className) {
-        if (!self.domElement.classList.contains(className)) {
-            self.domElement.className += ' ' + className;
-        }
-    }
-
-    function removeClass(className) {
-        var domclass, withSpace;
-        domclass = self.domElement.className;
-        if (domclass.indexOf(className) >= 0) {
-            withSpace = ' ' + className;
-            if (domclass.indexOf(withSpace) >= 0) {
-                className = withSpace;
-            }
-            self.domElement.className = self.domElement.className.split(className).join('');
-        }
-    }
-
     function removeDirection() {
-        removeClass('up');
-        removeClass('right');
-        removeClass('down');
-        removeClass('left');
+        tools.removeClass(self.domElement, 'up');
+        tools.removeClass(self.domElement, 'right');
+        tools.removeClass(self.domElement, 'down');
+        tools.removeClass(self.domElement, 'left');
     }
 
     function draw() {
@@ -41,7 +25,7 @@ function hero(heroConfig) {
         self.domElement.style.left = self.left + 'px';
         if (self.changedDirection) {
             removeDirection();
-            addClass(self.direction);
+            tools.addClass(self.domElement, self.direction);
             self.changedDirection = false;
         }
     }
@@ -51,9 +35,12 @@ function hero(heroConfig) {
             self.hp -= hp;
             self.hp = self.hp < 0 ? 0 : self.hp;
             self.hurt = true;
-            addClass('hurt');
+            tools.addClass(self.domElement, 'hurt');
             self.hpElement.style.width = getHpPercent() + '%';
-            setTimeout(function() { self.hurt = false, removeClass('hurt') }, 1000);
+            setTimeout(function () {
+                tools.removeClass(self.domElement, 'hurt');
+                self.hurt = false;
+            }, 1000);
         }
     }
 
@@ -69,30 +56,20 @@ function hero(heroConfig) {
         }
     }
 
-    function swingSword() {
-        addClass('swingSword');
-    }
-
-    function putSwordAway() {
-        removeClass('swingSword');
-    }
-
-    var self, move, created;
-
     move = {
-        up : function(px) {
+        up: function (px) {
             self.top = self.top > 0 ? self.top - px : 0;
             setDirection('up');
         },
-        right : function(px, fieldWidth) {
+        right: function (px, fieldWidth) {
             self.left = self.left < fieldWidth - self.width ? self.left + px : fieldWidth - self.width;
             setDirection('right');
         },
-        down : function(px, fieldHeight) {
+        down: function (px, fieldHeight) {
             self.top = self.top < fieldHeight - self.height ? self.top + px : fieldHeight - self.height;
             setDirection('down');
         },
-        left : function(px) {
+        left: function (px) {
             self.left = self.left > 0 ? self.left - px : 0;
             setDirection('left');
         },
@@ -102,9 +79,9 @@ function hero(heroConfig) {
 
     self = {
         domElement: created.dom,
-        name: heroConfig.name ? heroConfig.name : 'no name',
-        top: heroConfig.top ? heroConfig.top : 230,
-        left: heroConfig.left ? heroConfig.left : 180,
+        name: heroConfig.name || 'no name',
+        top: heroConfig.top || 230,
+        left: heroConfig.left || 180,
         width: 30,
         height: 30,
         xp: 0,
@@ -118,17 +95,13 @@ function hero(heroConfig) {
         loseHp: loseHp,
         hurt: false,
         direction: 'up',
-        changedDirection: false,
-        swingSword: swingSword,
-        putSwordAway: putSwordAway,
-        swingingSword: false,
-        swordLocked: false
+        changedDirection: false
     };
 
-    self.initHp = 0 + self.hp;
+    self.initHp = self.hp;
 
     return self;
 }
 
 // TODOs:
-// changedDirection
+// sword hitting monsters

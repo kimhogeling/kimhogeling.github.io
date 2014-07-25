@@ -13,8 +13,14 @@ function monster(monsterConfig, field) {
     }
 
     function loseHp(hp) {
-        self.hp -= hp;
-        self.hp = self.hp < 0 ? 0 : self.hp;
+        if (!self.hurt) {
+            self.hp -= hp;
+            self.hp = self.hp < 0 ? 0 : self.hp;
+            self.hurt = true;
+            setTimeout(function () {
+                self.hurt = false;
+            }, 1000);
+        }
     }
 
     var self, created, monsterTypes;
@@ -44,6 +50,7 @@ function monster(monsterConfig, field) {
         str: monsterConfig.lvl * 3,
         lvl: monsterConfig.lvl,
         draw: draw,
+        hurt: false,
         loseHp: loseHp
     };
     self.hp = 0 + self.initHp;

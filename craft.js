@@ -1,16 +1,29 @@
-var jscraft = (function(d, field, statusBox, hero, monster){
+var jscraft = (function (d, field, statusBox, hero, sword, monster) {
+
+    var self;
+
+    function gameover() {
+        self.hero.top = 0;
+        self.hero.left = 0;
+        self.hero.width = 0;
+        self.hero.height = 0;
+        self.field.domElement.innerHTML = '<h1>GAME OVER</h1>';
+    }
 
     function drawMonsters() {
         var i, length;
         length = self.monsters.length;
-        for (var i = 0; i < length; i++) {
-            self.monsters[i].draw();
-        };
+        for (i = 0; i < length; i++) {
+            if (self.monsters[i]) {
+                self.monsters[i].draw();
+            }
+        }
     }
 
     function draw() {
         if (self.needDraw) {
             self.hero.draw();
+            self.sword.draw();
             drawMonsters();
             self.statusBox.draw(self.hero, self.monsters);
             map.draw(self.field.currentField);
@@ -20,7 +33,7 @@ var jscraft = (function(d, field, statusBox, hero, monster){
     }
 
     function makeMonsters(configMonsters) {
-        var i, length, pos;
+        var i, length;
         length = configMonsters.length;
         for (i = 0; i < length; i++) {
             field = {
@@ -31,88 +44,136 @@ var jscraft = (function(d, field, statusBox, hero, monster){
         }
     }
 
-    var self;
-
     self = {
-        version : '0.0.0.2',
-        field : field,
-        statusBox : statusBox,
-        hero : hero,
-        monsters : [],
-        needDraw : true,
-        keys : {
+        version: '0.0.0.2',
+        field: field,
+        statusBox: statusBox,
+        hero: hero,
+        monsters: [],
+        needDraw: true,
+        keys: {
             // MOVE
-            38 : 'UP',
-            39 : 'RIGHT',
-            40 : 'DOWN',
-            37 : 'LEFT',
+            38: 'UP',
+            39: 'RIGHT',
+            40: 'DOWN',
+            37: 'LEFT',
             // USE WEAPONS
-            70 : 'SWORD',
-            68 : 'WEAPON',
+            70: 'SWORD',
+            68: 'WEAPON',
             // CHOOSE WEAPONS
-            49 : 'ONE',
-            50 : 'TWO',
-            51 : 'THREE',
-            52 : 'FOUR',
-            53 : 'FIVE',
-            54 : 'SIX',
-            55 : 'SEVEN',
-            56 : 'EIGHT',
-            57 : 'NINE'
+            49: 'ONE',
+            50: 'TWO',
+            51: 'THREE',
+            52: 'FOUR',
+            53: 'FIVE',
+            54: 'SIX',
+            55: 'SEVEN',
+            56: 'EIGHT',
+            57: 'NINE'
         },
-        activeActions : []
+        activeActions: []
     };
 
     self.reactToAction = {
-        UP : function () {
-            self.hero.move.up(2);
-            self.needDraw = true;
-        },
-        RIGHT : function () {
-            self.hero.move.right(2, self.field.width);
-            self.needDraw = true;
-        },
-        DOWN : function () {
-            self.hero.move.down(2, self.field.height);
-            self.needDraw = true;
-        },
-        LEFT : function () {
-            self.hero.move.left(2);
-            self.needDraw = true;
-        },
-        SWORD : function () {
-            if (self.hero.swingingSword === false, self.hero.swordLocked === false) {
-                self.hero.swordLocked = true;
-                self.hero.swingingSword = true;
-                self.hero.swingSword();
+        UP: {
+            btndown: function () {
+                self.hero.move.up(2);
+                self.sword.move.up(self.hero);
                 self.needDraw = true;
-                setTimeout(function() {
-                    self.hero.putSwordAway();
-                    self.hero.swingingSword = false;
+            },
+            btnup: function () {}
+        },
+        RIGHT: {
+            btndown: function () {
+                self.hero.move.right(2, self.field.width);
+                self.sword.move.right(self.hero);
+                self.needDraw = true;
+            },
+            btnup: function () {}
+        },
+        DOWN: {
+            btndown: function () {
+                self.hero.move.down(2, self.field.height);
+                self.sword.move.down(self.hero);
+                self.needDraw = true;
+            },
+            btnup: function () {}
+        },
+        LEFT: {
+            btndown: function () {
+                self.hero.move.left(2);
+                self.sword.move.left(self.hero);
+                self.needDraw = true;
+            },
+            btnup: function () {}
+        },
+        SWORD: {
+            btndown: function () {
+                if (self.sword.swinging === false && self.sword.locked === false) {
+                    tools.addClass(self.sword.domElement, 'shown');
+                    self.sword.locked = true;
+                    self.sword.swinging = true;
                     self.needDraw = true;
-                }, 200);
+                }
+            },
+            btnup: function () {
+                tools.removeClass(self.sword.domElement, 'shown');
+                self.sword.swinging = false;
+                self.needDraw = true;
+                self.sword.locked = false;
             }
         }
-    }
+    };
+
+    self.detectSwordCollision = function (monster, i) {
+        if (monster &&
+            self.sword.top > monster.top - self.sword.height &&
+            self.sword.top < monster.top + monster.height &&
+            self.sword.left > monster.left - self.sword.width &&
+            self.sword.left < monster.left + monster.width) {
+            monster.domElement.style.background = 'red';
+            monster.loseHp(self.hero.str);
+            if (monster.hp === 0) {
+                self.hero.gainXp(monster.str);
+                self.field.domElement.removeChild(monster.domElement);
+                delete self.monsters[i];
+            } else {
+                setTimeout(function () {
+                    monster.domElement.style.background = 'orange';
+                }, 1000);
+            }
+        }
+    };
 
     self.detectCollision = function () {
-        var i, len;
+        var i, len, swordDetection;
         len = self.monsters.length;
+        if (self.sword.swinging) {
+            swordDetection = self.detectSwordCollision;
+        } else {
+            swordDetection = function () {};
+        }
         for (i = 0; i < len; i += 1) {
-            if (self.hero.top > self.monsters[i].top - self.hero.height &&
+            if (self.monsters[i] &&
+                self.hero.top > self.monsters[i].top - self.hero.height &&
                 self.hero.top < self.monsters[i].top + self.monsters[i].height &&
                 self.hero.left > self.monsters[i].left - self.hero.width &&
                 self.hero.left < self.monsters[i].left + self.monsters[i].width) {
                 self.hero.loseHp(self.monsters[i].str * (2 / self.hero.str));
+                if (self.hero.hp === 0) {
+                    gameover();
+                }
                 self.needDraw = true;
             }
+            swordDetection(self.monsters[i], i);
         }
     };
 
     self.reactToActions = function () {
-        for (var action in self.activeActions) {
+        var action;
+        for (action in self.activeActions) {
             if (self.reactToAction[action]) {
-                self.reactToAction[action]();
+                self.reactToAction[action].btndown();
             }
         }
     };
@@ -127,9 +188,7 @@ var jscraft = (function(d, field, statusBox, hero, monster){
         d.onkeyup = function (e) {
             e = e || window.event;
             if (self.keys[e.keyCode]) {
-                if (self.keys[e.keyCode] === 'SWORD') {
-                    self.hero.swordLocked = false;
-                }
+                self.reactToAction[self.keys[e.keyCode]].btnup();
                 delete self.activeActions[self.keys[e.keyCode]];
             }
         };
@@ -141,19 +200,23 @@ var jscraft = (function(d, field, statusBox, hero, monster){
         self.field.setField('02.02');
         makeMonsters(map.fields[self.field.currentField].monsters);
         self.hero = hero({
-                name: 'Lale',
-                lvl: 1,
-                top: 230,
-                left: 180
-            });
+            name: 'Lale',
+            lvl: 1,
+            top: 230,
+            left: 180
+        });
+        self.sword = sword(self.hero);
         self.statusBox = statusBox;
         map.firstDraw();
         draw();
         self.bindKeys();
-        setInterval(self.reactToActions, 15);
-        setInterval(self.detectCollision, 15);
+        setInterval(self.reactToActions, 20);
+        setInterval(self.detectCollision, 20);
     };
 
     self.init();
 
-}(window.document, field, statusBox, hero, monster));
+    // ONLY FOR DEBUGGING!!!!
+    return self;
+
+}(window.document, field, statusBox, hero, sword, monster));
