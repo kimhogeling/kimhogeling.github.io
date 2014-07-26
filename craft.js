@@ -77,7 +77,7 @@ var jscraft = (function (d, field, statusBox, hero, sword, monster) {
     self.reactToAction = {
         UP: {
             btndown: function () {
-                self.hero.move.up(2);
+                self.hero.move.up();
                 self.sword.move.up(self.hero);
                 self.needDraw = true;
             },
@@ -85,7 +85,7 @@ var jscraft = (function (d, field, statusBox, hero, sword, monster) {
         },
         RIGHT: {
             btndown: function () {
-                self.hero.move.right(2, self.field.width);
+                self.hero.move.right(self.field.width);
                 self.sword.move.right(self.hero);
                 self.needDraw = true;
             },
@@ -93,7 +93,7 @@ var jscraft = (function (d, field, statusBox, hero, sword, monster) {
         },
         DOWN: {
             btndown: function () {
-                self.hero.move.down(2, self.field.height);
+                self.hero.move.down(self.field.height);
                 self.sword.move.down(self.hero);
                 self.needDraw = true;
             },
@@ -101,7 +101,7 @@ var jscraft = (function (d, field, statusBox, hero, sword, monster) {
         },
         LEFT: {
             btndown: function () {
-                self.hero.move.left(2);
+                self.hero.move.left();
                 self.sword.move.left(self.hero);
                 self.needDraw = true;
             },

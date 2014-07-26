@@ -58,20 +58,20 @@ function hero(heroConfig) {
     }
 
     move = {
-        up: function (px) {
-            self.top = self.top > 0 ? self.top - px : 0;
+        up: function () {
+            self.top = self.top > 0 ? self.top - self.movePixels : 0;
             setDirection('up');
         },
-        right: function (px, fieldWidth) {
-            self.left = self.left < fieldWidth - self.width ? self.left + px : fieldWidth - self.width;
+        right: function (fieldWidth) {
+            self.left = self.left < fieldWidth - self.width ? self.left + self.movePixels : fieldWidth - self.width;
             setDirection('right');
         },
-        down: function (px, fieldHeight) {
-            self.top = self.top < fieldHeight - self.height ? self.top + px : fieldHeight - self.height;
+        down: function (fieldHeight) {
+            self.top = self.top < fieldHeight - self.height ? self.top + self.movePixels : fieldHeight - self.height;
             setDirection('down');
         },
-        left: function (px) {
-            self.left = self.left > 0 ? self.left - px : 0;
+        left: function () {
+            self.left = self.left > 0 ? self.left - self.movePixels : 0;
             setDirection('left');
         },
     };
@@ -93,6 +93,7 @@ function hero(heroConfig) {
         draw: draw,
         gainXp: gainXp,
         move: move,
+        movePixels: 3,
         loseHp: loseHp,
         hurt: false,
         direction: 'up',
