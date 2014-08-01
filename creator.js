@@ -1,6 +1,15 @@
 var creator = (function (d) {
 
     return {
+        createObstacle: function (type) {
+            var newObstacle;
+            newObstacle = d.createElement('div');
+            newObstacle.className = type;
+            field.domElement.appendChild(newObstacle);
+            return {
+                dom: newObstacle
+            }
+        },
         createUnit: function (id) {
             var hp, hpBar, newUnit, sword;
 

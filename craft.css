@@ -157,3 +157,8 @@ h1 {
 }
 
 /* colors: http://t3n.de/news/richtigen-farben-furs-461082/flat_design_2/ */
+
+.tree {
+    position: absolute;
+    background: url('img/obstacles/tree.png');
+}

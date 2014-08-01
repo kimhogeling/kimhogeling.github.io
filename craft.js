@@ -10,6 +10,16 @@ var jscraft = (function (d, field, statusBox, hero, sword, monster) {
         self.field.domElement.innerHTML = '<h1>GAME OVER</h1>';
     }
 
+    function drawObstacles() {
+        var i, length;
+        length = self.obstacles.length;
+        for (i = 0; i < length; i++) {
+            if (self.obstacles[i]) {
+                self.obstacles[i].draw();
+            }
+        }
+    }
+
     function drawMonsters() {
         var i, length;
         length = self.monsters.length;
@@ -24,12 +34,21 @@ var jscraft = (function (d, field, statusBox, hero, sword, monster) {
         if (self.needDraw) {
             self.hero.draw();
             self.sword.draw();
+            drawObstacles();
             drawMonsters();
             self.statusBox.draw(self.hero, self.monsters);
             map.draw(self.field.currentField);
             self.needDraw = false;
         }
         requestAnimationFrame(draw);
+    }
+
+    function makeObstacles(configObstacles) {
+        var i, length;
+        length = configObstacles.length;
+        for (i = 0; i < length; i++) {
+            self.obstacles.push(obstacle(configObstacles[i]));
+        }
     }
 
     function makeMonsters(configMonsters) {
@@ -49,6 +68,7 @@ var jscraft = (function (d, field, statusBox, hero, sword, monster) {
         field: field,
         statusBox: statusBox,
         hero: hero,
+        obstacles: [],
         monsters: [],
         needDraw: true,
         keys: {
@@ -198,6 +218,7 @@ var jscraft = (function (d, field, statusBox, hero, sword, monster) {
         map.init();
         self.field = field;
         self.field.setField('02.02');
+        makeObstacles(map.fields[self.field.currentField].obstacles);
         makeMonsters(map.fields[self.field.currentField].monsters);
         self.hero = hero({
             name: 'Lale',

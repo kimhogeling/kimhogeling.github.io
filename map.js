@@ -59,6 +59,28 @@ var map = {
                     type: 'Wurst',
                     lvl: 2
                 }
+            ],
+            obstacles : [
+                {
+                    type: 'tree',
+                    top: 130,
+                    left: 240
+                },
+                {
+                    type: 'tree',
+                    top: 50,
+                    left: 390
+                },
+                {
+                    type: 'tree',
+                    top: 300,
+                    left: 80
+                },
+                {
+                    type: 'tree',
+                    top: 200,
+                    left: 290
+                }
             ]
         },
         '03.02' : {
@@ -128,7 +150,7 @@ var map = {
     'savedCurrent' : '',
     'draw' : function(current) {
         if (map.savedCurrent !== current) {
-            console.log(current);
+            // console.log('current map:' + current);
             map.savedCurrent = current;
             document.querySelector('.mapdot').className = document.querySelector('.mapdot').className.split(' active').join('');
             document.querySelector('#dot' + current.split('.').join('')).className = document.querySelector('#dot' + current.split('.').join('')).className + ' active';
