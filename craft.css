@@ -81,12 +81,15 @@ h1 {
 #hero {
     height: 35px;
     width: 35px;
-    /*background: url('img/zelda-sprites-link.png');*/
-    background-size: 2170%;
+    /*background: url('img/hero/sprite.png');*/
 }
 
 #hero.hurt {
-    background: red;
+    -webkit-filter: invert();
+       -moz-filter: invert();
+        -ms-filter: invert();
+         -o-filter: invert();
+            filter: invert();
 }
 
 #hero.up {
