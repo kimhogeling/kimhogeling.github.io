@@ -1,0 +1,18 @@
+<!-- Traditional blocking external script
+     Practise: bad -->
+<script src="//script.js"></script>
+
+<!-- Asynchronously loaded script
+     Practise: best before 2014
+     Caution: no preload scanning
+     Caution: dependancy with CSS as it waits for CSSOM -->
+<script>
+    var script = document.createElement('script');
+    script.src = "//script.js";
+    document.getElementsByTagName('head')[0].appendChild(script);
+</script>
+
+<!-- Modern browsers will use 'async', older browsers will use 'defer'
+     Practise: best since 2014
+     Caution: Unordered execution -->
+<script src="//script.js" async defer></script>
