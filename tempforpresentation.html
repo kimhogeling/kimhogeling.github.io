@@ -1,3 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    ...
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css" lazyload="1" media="lazy">
+    <style>/* critical "Above the fold" CSS */</style>
+</head>
+<body>
+    ...
+    <script>
+        document.styleSheets[0].media.mediaText = "screen";
+    </script>
+</body>
+</html>
+
+
+
 <!-- Traditional blocking external script
      Practise: bad -->
 <script src="//script.js"></script>
