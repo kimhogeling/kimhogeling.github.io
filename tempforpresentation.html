@@ -16,3 +16,59 @@
      Practise: best since 2014
      Caution: Unordered execution -->
 <script src="//script.js" async defer></script>
+
+<script>
+
+function performClickout() {}
+
+function attachClickouts() {
+    var elements, i, length;
+    elements = document.querySelectorAll('.clickout');
+    length = elements.length;
+    for (i = 0; i < length; i++) {
+        elements[i].onclick =
+    }
+}
+
+
+
+function performClickout() {}
+
+function attachClickouts() {
+    s24js.addEventListener('.clickout', 'onclick', performClickout);
+}
+
+
+
+var s24js = (function() {
+    function addEventListener(selector, eventName, handler) {
+        _eventHandlerQueues[eventName].push({
+            'target_selector': selector,
+            'handler': handler
+        });
+    }
+
+    function _initEventDelegation(eventName) {
+        document[eventName] = function (event) {
+            var i, j, queue, queueLength, eventListener, elements, length;
+            queue = _eventHandlerQueues[eventName];
+            queueLength = queue.length;
+            for (i = 0; i < queueLength; i += 1) {
+                eventListener = queue[i];
+                elements = document.querySelectorAll(eventListener.target_selector);
+                length = elements.length;
+                for (j = 0; j < length; j += 1) {
+                    eventListener.handler.call(elements[j], event);
+                }
+            }
+        };
+    }
+
+    return {
+        addEventListener : addEventListener
+    }
+});
+
+
+
+</script>
