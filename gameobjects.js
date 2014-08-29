@@ -2,10 +2,11 @@ var field, statusBox;
 
 'use strict';
 
-field = (function (d) {
+field = (function (d, map) {
 
-    function setField(fieldCoordinates) {
-        if (typeof fieldCoordinates === 'string') {
+    function setField (fieldCoordinates) {
+        if (typeof fieldCoordinates === 'string' && typeof map.fields[fieldCoordinates] === 'object') {
+            console.log('current field: ' + fieldCoordinates);
             self.currentField = fieldCoordinates
         }
     }
@@ -20,7 +21,7 @@ field = (function (d) {
 
     return self;
 
-}(window.document));
+}(window.document, map));
 
 
 

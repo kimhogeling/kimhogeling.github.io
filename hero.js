@@ -59,31 +59,47 @@ function hero(heroConfig) {
 
     move = {
         up: function (fieldHeight) {
+            var direction = 'up';
             self.top = self.top > 0 ? self.top - self.movePixels : 0;
-            setDirection('up');
+            setDirection(direction);
             if (self.top <= 0) {
                 self.top = fieldHeight - self.width;
+                return true;
+            } else {
+                return false;
             }
         },
         right: function (fieldWidth) {
+            var direction = 'right';
             self.left = self.left < fieldWidth - self.width ? self.left + self.movePixels : fieldWidth - self.width;
-            setDirection('right');
+            setDirection(direction);
             if (self.left >= fieldWidth - self.width) {
                 self.left = 0;
+                return true;
+            } else {
+                return false;
             }
         },
         down: function (fieldHeight) {
+            var direction = 'down';
             self.top = self.top < fieldHeight - self.height ? self.top + self.movePixels : fieldHeight - self.height;
-            setDirection('down');
+            setDirection(direction);
             if (self.top >= fieldHeight - self.height) {
                 self.top = 0;
+                return true;
+            } else {
+                return false;
             }
         },
         left: function (fieldWidth) {
+            var direction = 'left';
             self.left = self.left > 0 ? self.left - self.movePixels : 0;
-            setDirection('left');
+            setDirection(direction);
             if (self.left <= 0) {
                 self.left = fieldWidth - self.width;
+                return true;
+            } else {
+                return false;
             }
         },
     };

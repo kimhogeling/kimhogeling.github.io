@@ -1,7 +1,7 @@
 var map = {
     'dom' : null,
     'fields' : {
-        '01.01' : {
+        '1.1' : {
             monsters : [
                 {
                     type: 'Kim',
@@ -11,9 +11,10 @@ var map = {
                     type: 'Wurst',
                     lvl: 2
                 }
-            ]
+            ],
+            obstacles : []
         },
-        '02.01' : {
+        '2.1' : {
             monsters : [
                 {
                     type: 'Kim',
@@ -23,9 +24,10 @@ var map = {
                     type: 'Wurst',
                     lvl: 2
                 }
-            ]
+            ],
+            obstacles : []
         },
-        '03.01' : {
+        '3.1' : {
             monsters : [
                 {
                     type: 'Kim',
@@ -35,9 +37,10 @@ var map = {
                     type: 'Wurst',
                     lvl: 2
                 }
-            ]
+            ],
+            obstacles : []
         },
-        '01.02' : {
+        '1.2' : {
             monsters : [
                 {
                     type: 'Kim',
@@ -47,9 +50,10 @@ var map = {
                     type: 'Wurst',
                     lvl: 2
                 }
-            ]
+            ],
+            obstacles : []
         },
-        '02.02' : {
+        '2.2' : {
             monsters : [
                 {
                     type: 'Kim',
@@ -83,7 +87,7 @@ var map = {
                 }
             ]
         },
-        '03.02' : {
+        '3.2' : {
             monsters : [
                 {
                     type: 'Kim',
@@ -93,9 +97,10 @@ var map = {
                     type: 'Wurst',
                     lvl: 2
                 }
-            ]
+            ],
+            obstacles : []
         },
-        '01.03' : {
+        '1.3' : {
             monsters : [
                 {
                     type: 'Kim',
@@ -105,9 +110,10 @@ var map = {
                     type: 'Wurst',
                     lvl: 2
                 }
-            ]
+            ],
+            obstacles : []
         },
-        '02.03' : {
+        '2.3' : {
             monsters : [
                 {
                     type: 'Kim',
@@ -117,9 +123,10 @@ var map = {
                     type: 'Wurst',
                     lvl: 2
                 }
-            ]
+            ],
+            obstacles : []
         },
-        '03.03' : {
+        '3.3' : {
             monsters : [
                 {
                     type: 'Kim',
@@ -129,7 +136,8 @@ var map = {
                     type: 'Wurst',
                     lvl: 2
                 }
-            ]
+            ],
+            obstacles : []
         }
     },
     'firstDraw' : function() {
@@ -138,7 +146,7 @@ var map = {
             dot = document.createElement('div');
             dot.id = 'dot' + coords.split('.').join('');
             dot.className = 'mapdot';
-            if (coords.split('.')[0] === '01') {
+            if ((coords.split('.')[0]|0) === 1) {
                 dot.className += ' first';
             }
             map.dom.appendChild(dot);
@@ -150,7 +158,6 @@ var map = {
     'savedCurrent' : '',
     'draw' : function(current) {
         if (map.savedCurrent !== current) {
-            // console.log('current map:' + current);
             map.savedCurrent = current;
             document.querySelector('.mapdot').className = document.querySelector('.mapdot').className.split(' active').join('');
             document.querySelector('#dot' + current.split('.').join('')).className = document.querySelector('#dot' + current.split('.').join('')).className + ' active';
@@ -160,4 +167,3 @@ var map = {
         map.dom = document.querySelector('#map');
     }
 };
-

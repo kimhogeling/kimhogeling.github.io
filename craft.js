@@ -64,6 +64,7 @@ var jscraft = (function (d, field, statusBox, hero, sword, monster) {
     }
 
     self = {
+        initiated: false,
         version: '0.0.0.2',
         field: field,
         statusBox: statusBox,
@@ -94,10 +95,26 @@ var jscraft = (function (d, field, statusBox, hero, sword, monster) {
         activeActions: []
     };
 
+    self.changeField = function (x, y) {
+        var currents, newX, newY, newField;
+        currents = self.field.currentField.split('.');
+        newX = (currents[0]|0) + x;
+        newY = (currents[1]|0) + y;
+        newField = newX + '.' + newY;
+
+        // THIS IS SHIT! .. Lets use angularjs.. or something else..
+        // self.field.setField(newField);
+        // reset(newField);
+
+        // console.log(x,y,currents,newX,newY,newField);
+    };
+
     self.reactToAction = {
         UP: {
             btndown: function () {
-                self.hero.move.up(self.field.height);
+                if (self.hero.move.up(self.field.height)) { // true if has to change field
+                    self.changeField(0,-1);
+                }
                 self.sword.move.up(self.hero);
                 self.needDraw = true;
             },
@@ -105,7 +122,9 @@ var jscraft = (function (d, field, statusBox, hero, sword, monster) {
         },
         RIGHT: {
             btndown: function () {
-                self.hero.move.right(self.field.width);
+                if (self.hero.move.right(self.field.width)) { // true if has to change field
+                    self.changeField(1,0);
+                }
                 self.sword.move.right(self.hero);
                 self.needDraw = true;
             },
@@ -113,7 +132,9 @@ var jscraft = (function (d, field, statusBox, hero, sword, monster) {
         },
         DOWN: {
             btndown: function () {
-                self.hero.move.down(self.field.height);
+                if (self.hero.move.down(self.field.height)) { // true if has to change field
+                    self.changeField(0,1);
+                }
                 self.sword.move.down(self.hero);
                 self.needDraw = true;
             },
@@ -121,7 +142,9 @@ var jscraft = (function (d, field, statusBox, hero, sword, monster) {
         },
         LEFT: {
             btndown: function () {
-                self.hero.move.left(self.field.width);
+                if (self.hero.move.left(self.field.width)) { // true if has to change field
+                    self.changeField(-1,0);
+                }
                 self.sword.move.left(self.hero);
                 self.needDraw = true;
             },
@@ -214,30 +237,53 @@ var jscraft = (function (d, field, statusBox, hero, sword, monster) {
         };
     };
 
-    self.init = function () {
-        map.init();
-        self.field = field;
-        self.field.setField('02.02');
+    self.reset = function (fieldPos) {
+        // window = void 0;
+        // document = void 0;
+        document.querySelector('#field').innerHTML = '';
+        self.obstacles = void 0;
+        self.monsters = void 0;
+        self.init(fieldPos);
+    }
+
+    self.init = function (fieldPos) {
+        if (!self.initiated) {
+            map.init();
+            self.field = field;
+        }
+        self.field.setField(fieldPos);
         makeObstacles(map.fields[self.field.currentField].obstacles);
         makeMonsters(map.fields[self.field.currentField].monsters);
-        self.hero = hero({
-            name: 'Lale',
-            lvl: 1,
-            top: 230,
-            left: 180
-        });
-        self.sword = sword(self.hero);
-        self.statusBox = statusBox;
-        map.firstDraw();
-        draw();
-        self.bindKeys();
-        setInterval(self.reactToActions, 20);
-        setInterval(self.detectCollision, 20);
+        if (!self.initiated) {
+            self.hero = hero({
+                name: 'Lale',
+                lvl: 1,
+                top: 230,
+                left: 180
+            });
+            self.sword = sword(self.hero);
+            self.statusBox = statusBox;
+        }
+        if (!self.initiated) {
+            map.firstDraw();
+            self.bindKeys();
+            setInterval(self.reactToActions, 20);
+            setInterval(self.detectCollision, 20);
+            draw();
+        }
+        self.initiated = true;
     };
-
-    self.init();
 
     // ONLY FOR DEBUGGING!!!!
     return self;
 
-}(window.document, field, statusBox, hero, sword, monster));
+});
+
+var instance = jscraft(window.document, field, statusBox, hero, sword, monster);
+instance.init('2.2');
+
+function reset (newField) {
+    instance = void 0;
+    instance = jscraft(window.document, field, statusBox, hero, sword, monster);
+    instance.reset(newField);
+}
